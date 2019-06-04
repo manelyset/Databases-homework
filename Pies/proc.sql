@@ -1,3 +1,4 @@
+-- Подсчитайте остатки продуктов и определите, какое количество продуктов надо заказать, чтобы выполнить все заказы.
 create proc missingProducts as
 begin
 with uncompReceits1 as select pNumber, prName, amount from

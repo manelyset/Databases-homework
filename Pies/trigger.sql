@@ -1,3 +1,6 @@
+-- Реализуйте ограничение “чтобы получить скидку 10% надо в сумме накупить пирогов не менее чем на 10000 рублей”. 
+-- Изменение скидки должно отвергаться, если это ограничение нарушается. И желательно наоборот, как только требуемая сумма
+-- накоплена, так сразу скидка должна автоматически стать 10%.
 with piesCost as (select pName, pCost as (pricePerKg * weight))
 create view ordersCost as select orderId, customer, oCost as sum(pNumber * pCost)
 from Orders

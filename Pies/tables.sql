@@ -14,7 +14,7 @@ create table Products
 create table Providers
 (provName varchar(50) primary key,
  address varchar(100) not null,
- phone char(12) not null check (phone like '+[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
+ phone char(12) not null --check (phone like '+[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
 );
 
 create table Receits 
