@@ -1,14 +1,22 @@
 -- Подсчитайте остатки продуктов и определите, какое количество продуктов надо заказать, чтобы выполнить все заказы.
-create proc missingProducts as
+create or replace function missingProducts ()
+ returns table (
+	prName varchar(50),
+	toBuy int
+)
+LANGUAGE plpgsql
+as $$
 begin
-with uncompReceits1 as select pNumber, prName, amount from
-nbPies as (uncompleted as (select orderId from Orders where (status = 'accepted' or status = 'processed'))
-inner join ordersPies on uncompleted.orderId = ordersPies.orderId)
-inner join receits on nbPies.pName = receits.pName
-view uncompReceits as select prName, neededAmount as (pNumber * amount) from uncompReceits1;
+create view nbPies as select pName, pNumber, status from Orders inner join ordersPies on orders.orderId = ordersPies.orderId
+where (status = 'accepted' or status = 'proceeded');
+create view uncompReceits1 as (select nbPies.pName, prName, amount, pNumber from nbPies inner join receits on nbPies.pName = receits.pName);
+create view uncompReceits as select prName, (pNumber * amount) as neededAmount from uncompReceits1;
 
-with totalNeeded as select prName, totalAmount as sum(neededAmount) from uncompReceits group by prName
-view comparison as select * from totalNeeded left join products on totalNeeded.pName = products.pName
+create view totalNeeded as select prName, sum(neededAmount) as totalAmount from uncompReceits group by prName;
+create view comparison as select totalNeeded.prName, totalAmount, restkg from totalNeeded left join products on totalNeeded.prName = products.prName;
 
-select prName, toBuy as (totalAmount - rest) from comparison where toBuy > 0
-end
+return query select prName, (totalAmount - restkg) as toBuy from comparison where (totalAmount - restkg) > 0 ;
+end;
+$$;
+
+select missingProducts();
