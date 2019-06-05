@@ -2,7 +2,7 @@
 create or replace function missingProducts ()
  returns table (
 	prName varchar(50),
-	toBuy int
+	toBuy float
 )
 LANGUAGE plpgsql
 as $$
@@ -15,8 +15,8 @@ create view uncompReceits as select prName, (pNumber * amount) as neededAmount f
 create view totalNeeded as select prName, sum(neededAmount) as totalAmount from uncompReceits group by prName;
 create view comparison as select totalNeeded.prName, totalAmount, restkg from totalNeeded left join products on totalNeeded.prName = products.prName;
 
-return query select prName, (totalAmount - restkg) as toBuy from comparison where (totalAmount - restkg) > 0 ;
+return query select comparison.prName, (totalAmount - restkg) as toBuy from comparison where (totalAmount - restkg) > 0 ;
 end;
-$$;
+$$; 
 
 select missingProducts();

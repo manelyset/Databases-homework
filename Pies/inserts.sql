@@ -39,6 +39,8 @@ insert into Orders values (1, to_date('04.06.2019', 'dd.mm.yyyy'), 'anna', 'aaa'
 insert into Orders values (2, to_date('04.06.2019', 'dd.mm.yyyy'), 'ivan', 'bbb', 'completed', 0);
 insert into Orders values (3, to_date('02.06.2019', 'dd.mm.yyyy'), 'denis', 'ccc', 'completed', 0);
 insert into Orders values (4, to_date('04.06.2019', 'dd.mm.yyyy'), 'anna', 'aaa', 'accepted', 0);
+insert into Orders values (5, 'tomorrow', 'anna', 'aaa', 'accepted', 0);
+insert into Orders values (6, 'tomorrow', 'denis', 'ccc', 'accepted', 0);
 
 insert into OrdersPies values (1, 'Chicken', 1);
 insert into OrdersPies values (1, 'Apple', 3);
@@ -46,3 +48,5 @@ insert into OrdersPies values (2, 'Chicken', 2);
 insert into OrdersPies values (2, 'Meat', 2);
 insert into OrdersPies values (3, 'Meat', 3);
 insert into OrdersPies values (4, 'Chicken', 4);
+insert into OrdersPies values (5, 'Chicken', 1);
+insert into OrdersPies values (6, 'Chicken', 2);
