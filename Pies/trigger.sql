@@ -12,32 +12,14 @@ execute procedure discount_trigger();
 create or replace function discount_trigger()
  returns trigger as
 $BODY$ 
-declare cust1 varchar(20) = (select top1 customer from new);
-declare cust2 varchar(20) = (select top1 customer from old);
-declare totalCost int = (select sum(oCost) from ordersCost where customer = cust1);
+--declare cust1 varchar(20) = (select top1 customer from new);
+--declare cust2 varchar(20) = (select top1 customer from old);
+declare totalCost int = (select sum(oCost) from ordersCost where customer = new.customer);
 begin
 if totalCost < 10000 then
-    if cust2 is null then
-	    insert into Orders values ((select orderId from new),
-								  (select orderDate from new),
-								  (select customer from new),
-								  (select adress from new),
-								  (select status from new),
-								  0);
-	else
-	    update Orders set discount = 0 where orderId = (select top1 orderId from new);
-    end if;
+    update orders set discount = 0 where orderId = new.orderId;
 else
-    if cust2 is null then
-	    insert into Orders values ((select orderId from new),
-								  (select orderDate from new),
-								  (select customer from new),
-								  (select adress from new),
-								  (select status from new),
-								  10);
-	else
-	    update Orders set discount = 10 where orderId = (select top1 orderId from new);
-	end if;
+   update orders set discount = 0 where orderId = new.orderId; 
 end if;
 return new;
 end;
