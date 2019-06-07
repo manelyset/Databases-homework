@@ -42,6 +42,9 @@ insert into Orders values (4, to_date('04.06.2019', 'dd.mm.yyyy'), 'anna', 'aaa'
 insert into Orders values (5, 'tomorrow', 'anna', 'aaa', 'accepted', 0);
 insert into Orders values (6, 'tomorrow', 'denis', 'ccc', 'accepted', 0);
 
+delete from orderspies where orderId > 3;
+delete from orders where orderId > 3;
+select * from orders;
 
 insert into OrdersPies values (1, 'Chicken', 1);
 insert into OrdersPies values (1, 'Apple', 3);

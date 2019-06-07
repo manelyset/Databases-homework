@@ -7,23 +7,19 @@ from Orders
 inner join (ordersPies inner join PiesCost on piesCost.pName = ordersPies.pName) as ordersPies2
 on Orders.orderId = ordersPies2.orderId group by Orders.orderId;
 
-create trigger discountTrigger after insert or update of discount on Orders
+create trigger discountTrigger before insert or update on Orders
 execute procedure discount_trigger();
 create or replace function discount_trigger()
  returns trigger as
 $BODY$ 
---declare cust1 varchar(20) = (select top1 customer from new);
---declare cust2 varchar(20) = (select top1 customer from old);
-declare totalCost int = (select sum(oCost) from ordersCost where customer = new.customer);
+declare totalCost float = (select sum(oCost) from ordersCost where customer = new.customer);
 begin
 if totalCost < 10000 then
-    update orders set discount = 0 where orderId = new.orderId;
+    set new.discount = 0;
 else
-   update orders set discount = 0 where orderId = new.orderId; 
+    set new.discount = 10;
 end if;
 return new;
 end;
 $BODY$
 LANGUAGE plpgsql VOLATILE;
-
-select * from Orders;
