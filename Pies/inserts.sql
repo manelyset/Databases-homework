@@ -40,7 +40,7 @@ insert into Orders values (2, to_date('04.06.2019', 'dd.mm.yyyy'), 'ivan', 'bbb'
 insert into Orders values (3, to_date('02.06.2019', 'dd.mm.yyyy'), 'denis', 'ccc', 'completed', 0);
 insert into Orders values (4, to_date('04.06.2019', 'dd.mm.yyyy'), 'anna', 'aaa', 'accepted', 0);
 insert into Orders values (5, 'tomorrow', 'anna', 'aaa', 'accepted', 0);
-insert into Orders values (6, 'tomorrow', 'denis', 'ccc', 'accepted', 0);
+insert into Orders values (6, 'tomorrow', 'petr', 'ddd', 'accepted', 10);
 
 delete from orderspies where orderId > 3;
 delete from orders where orderId > 3;

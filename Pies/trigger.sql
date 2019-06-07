@@ -14,9 +14,11 @@ create or replace function discount_trigger()
 $BODY$ 
 declare totalCost float = (select sum(oCost) from ordersCost where customer = new.customer);
 begin
-if totalCost < 10000 then
+if totalCost < 10000 or totalCost is null then
+    raise notice '0';
     set new.discount = 0;
 else
+    raise notice '10';
     set new.discount = 10;
 end if;
 return new;

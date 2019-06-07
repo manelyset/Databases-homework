@@ -22,18 +22,12 @@ loop
 	(with piesInOrder as (select * from ordersPies where ordersPies.orderId = 5)
 	select prName, sum (pNumber * amount) as amount from piesInOrder inner join receits on piesInOrder.pName = receits.pName
 	group by prName);
-	select * from productsNeeded;
+	
 	create view restAfterOrder as
 	select productsNeeded.prName, (restkg - productsNeeded.amount) as rest from productsNeeded inner join products_copy on productsNeeded.prName = products_copy.prName;
-	select * from restAfterOrder;
-	exit when sum(restAfterOrder.rest) != abs(sum(restAfterOrder.rest));
-	for r in select rest from restAfterOrder
-	loop
-	    for n in select prName from restAfterOrder
-		loop
-	        update products_copy set rest = r where products.prName = n;
-		end loop;	
- 	end loop;    
+	
+	exit when (select sum(rest) from restAfterOrder) != (select sum(abs(rest)) from restAfterOrder);
+	update products_copy set restkg = restAfterOrder.rest from restAfterOrder where products_copy.prName = restAfterOrder.prName;    
 	maxord := maxord + 1;
 	drop view if exists productsNeeded cascade;
     drop view if exists restAfterOrder cascade;
