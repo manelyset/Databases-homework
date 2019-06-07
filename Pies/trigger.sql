@@ -6,20 +6,22 @@ create view ordersCost as select Orders.orderId, customer, sum(pNumber * pCost) 
 from Orders
 inner join (ordersPies inner join PiesCost on piesCost.pName = ordersPies.pName) as ordersPies2
 on Orders.orderId = ordersPies2.orderId group by Orders.orderId;
-
+drop trigger discountTrigger on Orders;
 create trigger discountTrigger before insert or update on Orders
+for each row
 execute procedure discount_trigger();
 create or replace function discount_trigger()
  returns trigger as
 $BODY$ 
-declare totalCost float = (select sum(oCost) from ordersCost where customer = new.customer);
+declare totalCost double precision = (select sum(oCost) from ordersCost where customer = new.customer);
 begin
+raise notice '%', new.customer;
 if totalCost < 10000 or totalCost is null then
     raise notice '0';
-    set new.discount = 0;
+    new.discount := 0;
 else
     raise notice '10';
-    set new.discount = 10;
+    new.discount := 10;
 end if;
 return new;
 end;

@@ -6,9 +6,10 @@ create or replace function maxOrders ()
 LANGUAGE plpgsql
 as $$
 declare maxord int = 0;
-declare oid orders%rowtype;
-declare r products%rowtype;
-declare n products%rowtype;
+declare curs refcursor;
+declare oid int;
+--declare r products%rowtype;
+--declare n products%rowtype;
 begin
 CREATE TABLE products_copy (LIKE products INCLUDING ALL);
 INSERT INTO products_copy
@@ -16,10 +17,10 @@ SELECT * FROM products;
 create view tomorrowOrders as select * from orders
 where (orderDate = 'tomorrow' and (status = 'accepted' or status = 'proceeded'))
 order by orderId;
-for oid in select orderId from tomorrowOrders
+for oid in select orderId from tomorrowOrders order by orderId
 loop
     create view productsNeeded as
-	(with piesInOrder as (select * from ordersPies where ordersPies.orderId = 5)
+	(with piesInOrder as (select * from ordersPies where ordersPies.orderId = oid)
 	select prName, sum (pNumber * amount) as amount from piesInOrder inner join receits on piesInOrder.pName = receits.pName
 	group by prName);
 	

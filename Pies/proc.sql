@@ -16,6 +16,7 @@ create view totalNeeded as select prName, sum(neededAmount) as totalAmount from 
 create view comparison as select totalNeeded.prName, totalAmount, restkg from totalNeeded left join products on totalNeeded.prName = products.prName;
 
 return query select comparison.prName, (totalAmount - restkg) as toBuy from comparison where (totalAmount - restkg) > 0 ;
+drop view nbPies cascade;
 end;
 $$; 
 
